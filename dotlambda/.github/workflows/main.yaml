@@ -29,7 +29,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: 'us-east-2'  # Replace with your AWS region
+          aws-region: 'us-east-2'  # Replace with your AWS region
           function-name: 'lambda-test'  # Replace with your Lambda function name
           payload: '{"key1":"value1","key2":"value2"}'  # Optional, replace with your payload
           payload-file: './path/to/payload.json'  # Optional, replace with the path to your payload file
