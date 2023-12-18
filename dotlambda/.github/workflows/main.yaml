@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1'  # Adjust version as needed
+
+      - name: Build
+        run: dotnet build --configuration Release
+
+      - name: Publish
+        run: dotnet publish -c Release -o ${{ github.workspace }}/publish
+
+      - name: Deploy to AWS Lambda
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: 'us-east-2'  # Replace with your AWS region
+          function-name: 'lambda-test'  # Replace with your Lambda function name
+          payload: '{"key1":"value1","key2":"value2"}'  # Optional, replace with your payload
+          payload-file: './path/to/payload.json'  # Optional, replace with the path to your payload file
+          publish: '${{ github.workspace }}/publish'
